@@ -1,3 +1,5 @@
+import tabJoursOrdonne from "./Utilitaire/gestionTemps.js";
+
 // Clé de l'API openweathermap
 const cleAPI = "7ba5ef6edaf235f00a2f97e8ee4da108";
 let resultatAPI;
@@ -9,6 +11,11 @@ const localisation = document.querySelector(".localisation");
 const heure = document.querySelectorAll(".heure-prevision-nom");
 const tempPourH = document.querySelectorAll(".heure-prevision-valeur");
 
+const joursDiv = document.querySelectorAll(".jour-prevision-nom");
+const tempJoursDiv = document.querySelectorAll(".jour-prevision-temp");
+
+const icone = document.querySelector(".logo-meteo");
+const chargement = document.querySelector(".overlay-icone-chargement");
 
 if(navigator.geolocation){
     navigator.geolocation.getCurrentPosition( (position) => {
@@ -30,6 +37,7 @@ function AppelAPI(long, lat){
     })
     .then ( (data) => {
         // on s'occupe des données
+        console.log(data);
         resultatAPI = data;
 
         temps.innerText = resultatAPI.current.weather[0].description;
@@ -55,8 +63,28 @@ function AppelAPI(long, lat){
         }
 
         // temperature toute les 3h
-        for(let j = 0; j < tempPourH.length; j++){
-            tempPourH[j].innerText = `${Math.trunc(resultatAPI.hourly[j*3].temp)} °C`
+        for(let i = 0; i < tempPourH.length; i++){
+            tempPourH[i].innerText = `${Math.trunc(resultatAPI.hourly[i*3].temp)} °C`
         }
-    })
+
+        // trois premières lettres des jours de la semaine
+        for(let i = 0; i < tabJoursOrdonne.length; i++){
+            joursDiv[i].innerText = tabJoursOrdonne[i].slice(0,3);
+        }
+
+        // temperature par jour
+        for(let i = 0; i < 7; i++){
+            tempJoursDiv[i].innerText = `${Math.trunc(resultatAPI.daily[i+1].temp.day)} °C`
+        }
+
+        // Icone dynamique
+        if(heureActuelle >=6 && heureActuelle < 21){
+            icone.src = `ressources/jour/${resultatAPI.current.weather[0].icon}.svg`;
+        }
+        else{
+            icone.src = `ressources/nuit/${resultatAPI.current.weather[0].icon}.svg`;
+        }
+
+        chargement.classList.add("disparition");
+    });
 }

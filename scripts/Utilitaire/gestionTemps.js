@@ -9,4 +9,6 @@ jourActuel = jourActuel.charAt(0).toUpperCase() + jourActuel.slice(1);
 
 let tabJoursOrdonne = joursSemaine.slice(joursSemaine.indexOf(jourActuel)).concat(joursSemaine.slice(0, joursSemaine.indexOf(jourActuel)));
 
-console.log(tabJoursOrdonne);
+// console.log(tabJoursOrdonne);
+
+export default tabJoursOrdonne;
