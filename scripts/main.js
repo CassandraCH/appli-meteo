@@ -86,5 +86,6 @@ function AppelAPI(long, lat){
         }
 
         chargement.classList.add("disparition");
-    });
+    })
+    .catch( (err) => console.log(err)); // si il y a une erreur, on l'affiche
 }
